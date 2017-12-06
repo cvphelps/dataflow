@@ -112,9 +112,6 @@ function drawDraggable(thisLayer, x, y, color, text) {
   });
 }
 
-// temperature sensor array
-  var temperatureArray = [];
-
 // Build Sensor Sidebar
   var sensorBar = new Konva.Layer();
   stage.add(sensorBar);

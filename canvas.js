@@ -5,27 +5,79 @@ const brick = '#D95E27';
 const gold = '#E8A723';
 const white = '#ffffff';
 
-
 var stage = new Konva.Stage({
   container: 'container',
-  width: 1400,
-  height: 800
+  // scale appropriate for Chromebook
+  width: 1300,
+  height: 750
 });
 
 // Add Layer
 var layer = new Konva.Layer();
 stage.add(layer);
 
-// Create Sidebars
-var sensorSidebar = new Konva.Layer();
-stage.add(sensorSidebar);
+function drawSensor(sensor, text) {
+  sensor.add(new Konva.Tag({
+    fill: teal,
+    cornerRadius: 20
+  }));
+  sensor.add(new Konva.Text({
+    text: text,
+    fontSize: 14,
+    fill: 'white',
+    align: 'center',
+    width: 140,
+    padding: 10
+  }));
+}
 
-var sidebarBox = new Konva.Rect({ x:1000, y:0, width:300, height:800, fill:'white', stroke:'gray', strokeWidth:1 });
-sensorSidebar.add(sidebarBox);
-sensorSidebar.draw();
+// Build Sensor Sidebar
+  var sensorBar = new Konva.Layer();
+  stage.add(sensorBar);
+  // Bounding Box
+  var sensorBox = new Konva.Rect({ x:995, y:1, width:300, height:748, fill:'white', stroke:teal, strokeWidth:3 });
+  sensorBar.add(sensorBox);
+  // temperature
+  var temperature = new Konva.Label({ x: 1000, y: 20 });
+  drawSensor(temperature, 'temperature');
+  sensorBar.add(temperature);
+  // humidity
+  var humidity = new Konva.Label({ x: 1150, y: 20 });
+  drawSensor(humidity, 'humidity');
+  sensorBar.add(humidity);
+  // light
+  var light = new Konva.Label({ x: 1000, y: 60 });
+  drawSensor(light, 'light');
+  sensorBar.add(light);
+  // CO2
+  var CO2 = new Konva.Label({ x: 1150, y: 60 });
+  drawSensor(CO2, 'CO2');
+  sensorBar.add(CO2);
+  // soil moisture
+  var soilMoisture = new Konva.Label({ x: 1000, y: 100 });
+  drawSensor(soilMoisture, 'soil moisture');
+  sensorBar.add(soilMoisture);
+  // wet temperature
+  var wetTemperature = new Konva.Label({ x: 1150, y: 100 });
+  drawSensor(wetTemperature, 'wet temp');
+  sensorBar.add(wetTemperature);
+  sensorBar.draw();
+
+// Build Logic Sidebar
+  var logicBar = new Konva.Layer();
+  stage.add(logicBar);
+  // bounding box
+  var logicBox = new Konva.Rect({ x:995, y:1, width:300, height:748, fill:'white', stroke:greenery, strokeWidth:3 });
+  logicBar.add(logicBox);
+  // number
+  var number = new Konva.Label({ x: 1000, y: 20 });
+  drawSensor(number, 'number');
+  logicBar.add(number);
+
+  logicBar.draw();
 
 // Create Sensors Tab
-function drawTab(label, color, text) {
+function drawTab(label, color, text, sidebar, bar) {
   label.add(new Konva.Tag({
     fill: color,
     cornerRadius: 10
@@ -40,6 +92,8 @@ function drawTab(label, color, text) {
   }));
   label.on('click', function() {
     console.log(text + " tab clicked!");
+    // sidebar.stroke(color);
+    // bar.draw();
   });
   label.on('mouseover', function() {
     document.body.style.cursor = 'pointer';

@@ -1,10 +1,3 @@
-// Colors
-const teal = '#2D758C';
-const greenery = '#90BC57';
-const brick = '#D95E27';
-const gold = '#E8A723';
-const white = '#ffffff';
-
 var stage = new Konva.Stage({
   container: 'container',
   // scale appropriate for Chromebook
@@ -15,28 +8,6 @@ var stage = new Konva.Stage({
 // Add Layer
 var layer = new Konva.Layer();
 stage.add(layer);
-
-var contents = {};
-
-function drawSidebar(layer, color) {
-  var box = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:color, strokeWidth:3 });
-  layer.add(box);
-}
-
-function drawButton(node, text, color) {
-  node.add(new Konva.Tag({
-    fill: color,
-    cornerRadius: 20
-  }));
-  node.add(new Konva.Text({
-    text: text,
-    fontSize: 14,
-    fill: 'white',
-    align: 'center',
-    width: 200,
-    padding: 10
-  }));
-}
 
 function drawBlock(node, text, color) {
   node.add(new Konva.Tag({
@@ -124,36 +95,37 @@ function drawDraggable(thisLayer, x, y, color, text) {
   drawDraggable(sensorBar, 1010, 220, teal, 'wet temp');
   sensorBar.draw();
 
+
+function buildSensors(sensorsBar) {
+  drawSidebar(sensorsBar, greenery);
+  var sensorsY = 20;
+  sensorsArray.forEach(function(item) {
+    drawDraggable(sensorsBar, 1010, sensorsY, teal, item);
+    sensorsY += 40;
+  });
+  sensorsBar.draw();
+  sensorsBar.hide();
+}
+
+// Build Sensors Sidebar
+  var sensorsBar = new Konva.Layer();
+  stage.add(sensorsBar);
+  buildLogic(sensorsBar);
+
 // Build Logic Sidebar
   var logicBar = new Konva.Layer();
   stage.add(logicBar);
-  drawSidebar(logicBar, greenery);
-  drawDraggable(logicBar, 1010, 20, greenery, 'number');
-  drawDraggable(logicBar, 1010, 60, greenery, 'and');
-  drawDraggable(logicBar, 1010, 100, greenery, 'or');
-  drawDraggable(logicBar, 1010, 140, greenery, 'greater than');
-  drawDraggable(logicBar, 1010, 180, greenery, 'less than');
-  drawDraggable(logicBar, 1010, 220, greenery, 'equal to');
-  drawDraggable(logicBar, 1010, 260, greenery, 'not equal to');
-  drawDraggable(logicBar, 1010, 300, greenery, 'clock');
-  logicBar.draw();
-  logicBar.hide();
+  buildLogic(logicBar);
 
 // Build Actuators Sidebar
-  var actuatorsBar = new Konva.Layer();
-  stage.add(actuatorsBar);
-  drawSidebar(actuatorsBar, brick);
-  drawDraggable(actuatorsBar, 1010, 20, brick, 'relay');
-  drawDraggable(actuatorsBar, 1010, 60, brick, 'scaled output');
-  actuatorsBar.draw();
-  actuatorsBar.hide();
+  var actBar = new Konva.Layer();
+  stage.add(actBar);
+  buildActuators(actBar);
 
 // Build Data Sidebar
   var dataBar = new Konva.Layer();
   stage.add(dataBar);
-  drawSidebar(dataBar, gold);
-  dataBar.draw();
-  dataBar.hide();
+  buildData(dataBar);
 
 // Build Status Sidebar
   var statusBar = new Konva.Layer();
@@ -179,7 +151,7 @@ function drawTab(label, color, text, sidebar, bar) {
   label.on('click', function() {
     sensorBar.hide();
     logicBar.hide();
-    actuatorsBar.hide();
+    actBar.hide();
     dataBar.hide();
     statusBar.hide();
     if (text === 'sensors') {
@@ -187,7 +159,7 @@ function drawTab(label, color, text, sidebar, bar) {
     } else if (text === 'logic') {
       logicBar.show();
     } else if (text === 'actuators') {
-      actuatorsBar.show();
+      actBar.show();
     } else if (text === 'data') {
       dataBar.show();
     } else if (text === 'simulated') {

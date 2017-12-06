@@ -16,14 +16,6 @@ var stage = new Konva.Stage({
 var layer = new Konva.Layer();
 stage.add(layer);
 
-function drawBlock(sensor, text, color) {
-
-}
-
-/* drag and drop buttons
-   when a button is dropped outside the sidebar area, it
-   generates an element 
- */
 function drawButton(node, text, color) {
   node.add(new Konva.Tag({
     fill: color,
@@ -37,14 +29,6 @@ function drawButton(node, text, color) {
     width: 200,
     padding: 10
   }));
-
-  node.on('dragend', function() {
-    if (node.x() < 1000 && node.x() > 0 && node.y() < 750 && node.y() > 0) {
-      console.log("drag and dropped!");
-    } else {
-      node.hide();
-    }
-  });
 }
 
 function drawSidebar(layer, color) {
@@ -52,14 +36,24 @@ function drawSidebar(layer, color) {
   layer.add(box);
 }
 
-
 function drawDraggable(layer, x, y, color, text) {
+  // Static Button
   var buttonStatic = new Konva.Label({x:x,y:y});
   drawButton(buttonStatic, text, color);
   layer.add(buttonStatic);
+  // Draggable Button
   var buttonDraggable = new Konva.Label({x:x,y:y, draggable:true });
   drawButton(buttonDraggable, text, color);
   layer.add(buttonDraggable);
+
+  // on dragend, reset draggable button to original location, create new block at destination
+  node.on('dragend', function() {
+    if (node.x() < 1000 && node.x() > 0 && node.y() < 750 && node.y() > 0) {
+      console.log("drag and dropped!");
+    } else {
+      node.hide();
+    }
+  });
 }
 
 // temperature sensor array

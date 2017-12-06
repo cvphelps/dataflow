@@ -43,14 +43,43 @@ function drawBlock(node, text, color) {
     fill: color,
     cornerRadius: 20
   }));
-  node.add(new Konva.Text({
+
+  var labelText = new Konva.Text({
     text: text,
     fontSize: 14,
     fill: 'white',
     align: 'center',
     width: 120,
     padding: 10
-  }))
+  });
+  node.add(labelText);
+
+  node.on('dblclick', function() {
+    console.log('double clicked ' + text);
+    var x = node.x();
+    var y = node.y();
+    // create editable text area
+    var textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    textarea.value = labelText.text();
+    textarea.style.position = 'absolute';
+    textarea.style.left = x + 'px';
+    textarea.style.top = y + 'px';
+    textarea.style.width = 100;
+    textarea.style.height = 20;
+    textarea.style.rows = 1;
+    textarea.focus();
+
+    textarea.addEventListener('keydown', function (e) {
+      // hide textbox when user presses Enter
+      if (e.keyCode === 13) {
+        labelText.text(textarea.value);
+        layer.draw();
+        document.body.removeChild(textarea);
+      }
+    });
+  });
 }
 
 function drawDraggable(thisLayer, x, y, color, text) {

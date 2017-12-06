@@ -16,12 +16,20 @@ var stage = new Konva.Stage({
 var layer = new Konva.Layer();
 stage.add(layer);
 
-function drawButton(sensor, text, color) {
-  sensor.add(new Konva.Tag({
+function drawBlock(sensor, text, color) {
+
+}
+
+/* drag and drop buttons
+   when a button is dropped outside the sidebar area, it
+   generates an element 
+ */
+function drawButton(node, text, color) {
+  node.add(new Konva.Tag({
     fill: color,
     cornerRadius: 20
   }));
-  sensor.add(new Konva.Text({
+  node.add(new Konva.Text({
     text: text,
     fontSize: 14,
     fill: 'white',
@@ -29,118 +37,81 @@ function drawButton(sensor, text, color) {
     width: 200,
     padding: 10
   }));
+
+  node.on('dragend', function() {
+    if (node.x() < 1000 && node.x() > 0 && node.y() < 750 && node.y() > 0) {
+      console.log("drag and dropped!");
+    } else {
+      node.hide();
+    }
+  });
 }
+
+function drawSidebar(layer, color) {
+  var box = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:color, strokeWidth:3 });
+  layer.add(box);
+}
+
+
+function drawDraggable(layer, x, y, color, text) {
+  var buttonStatic = new Konva.Label({x:x,y:y});
+  drawButton(buttonStatic, text, color);
+  layer.add(buttonStatic);
+  var buttonDraggable = new Konva.Label({x:x,y:y, draggable:true });
+  drawButton(buttonDraggable, text, color);
+  layer.add(buttonDraggable);
+}
+
+// temperature sensor array
+  var temperatureArray = [];
 
 // Build Sensor Sidebar
   var sensorBar = new Konva.Layer();
   stage.add(sensorBar);
-  // Bounding Box
-  var sensorBox = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:teal, strokeWidth:3 });
-  sensorBar.add(sensorBox);
-  // temperature
-  var temperature = new Konva.Label({ x: 1010, y: 20, draggable: true });
-  drawButton(temperature, 'temperature', teal);
-  sensorBar.add(temperature);
-  // humidity
-  var humidity = new Konva.Label({ x: 1010, y: 60 });
-  drawButton(humidity, 'humidity', teal);
-  sensorBar.add(humidity);
-  // light
-  var light = new Konva.Label({ x: 1010, y: 100 });
-  drawButton(light, 'light', teal);
-  sensorBar.add(light);
-  // CO2
-  var CO2 = new Konva.Label({ x: 1010, y: 140 });
-  drawButton(CO2, 'CO2', teal);
-  sensorBar.add(CO2);
-  // soil moisture
-  var soilMoisture = new Konva.Label({ x: 1010, y: 180 });
-  drawButton(soilMoisture, 'soil moisture', teal);
-  sensorBar.add(soilMoisture);
-  // wet temperature
-  var wetTemperature = new Konva.Label({ x: 1010, y: 220 });
-  drawButton(wetTemperature, 'wet temp', teal);
-  sensorBar.add(wetTemperature);
-  
+  drawSidebar(sensorBar, teal);
+  drawDraggable(sensorBar, 1010, 20, teal, 'temperature');
+  drawDraggable(sensorBar, 1010, 60, teal, 'humidity');
+  drawDraggable(sensorBar, 1010, 100, teal, 'light');
+  drawDraggable(sensorBar, 1010, 140, teal, 'CO2');
+  drawDraggable(sensorBar, 1010, 180, teal, 'soil moisture');
+  drawDraggable(sensorBar, 1010, 220, teal, 'wet temperature');
   sensorBar.draw();
 
 // Build Logic Sidebar
   var logicBar = new Konva.Layer();
   stage.add(logicBar);
-  // bounding box
-  var logicBox = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:greenery, strokeWidth:3 });
-  logicBar.add(logicBox);
-  // number
-  var number = new Konva.Label({ x: 1010, y: 20 });
-  drawButton(number, 'number', greenery);
-  logicBar.add(number);
-  // and
-  var and = new Konva.Label({ x: 1010, y: 60 });
-  drawButton(and, 'and', greenery);
-  logicBar.add(and);
-  // or
-  var or = new Konva.Label({ x: 1010, y: 100 });
-  drawButton(or, 'or', greenery);
-  logicBar.add(or);
-  // greater than
-  var greaterThan = new Konva.Label({ x: 1010, y: 140 });
-  drawButton(greaterThan, 'greater than', greenery);
-  logicBar.add(greaterThan);
-  // less than
-  var lessThan = new Konva.Label({ x: 1010, y: 180 });
-  drawButton(lessThan, 'less than', greenery);
-  logicBar.add(lessThan);
-  // equal to
-  var equalTo = new Konva.Label({ x: 1010, y: 220 });
-  drawButton(equalTo, 'equal to', greenery);
-  logicBar.add(equalTo);
-  // not equal to
-  var notEqualTo = new Konva.Label({ x: 1010, y: 260 });
-  drawButton(notEqualTo, 'not equal to', greenery);
-  logicBar.add(notEqualTo);
-  // clock
-  var clock = new Konva.Label({ x: 1010, y: 300 });
-  drawButton(clock, 'clock', greenery);
-  logicBar.add(clock);
-
+  drawSidebar(logicBar, greenery);
+  drawDraggable(logicBar, 1010, 20, greenery, 'number');
+  drawDraggable(logicBar, 1010, 60, greenery, 'and');
+  drawDraggable(logicBar, 1010, 100, greenery, 'or');
+  drawDraggable(logicBar, 1010, 140, greenery, 'greater than');
+  drawDraggable(logicBar, 1010, 180, greenery, 'less than');
+  drawDraggable(logicBar, 1010, 220, greenery, 'equal to');
+  drawDraggable(logicBar, 1010, 260, greenery, 'not equal to');
+  drawDraggable(logicBar, 1010, 300, greenery, 'clock');
   logicBar.draw();
   logicBar.hide();
 
 // Build Actuators Sidebar
   var actuatorsBar = new Konva.Layer();
   stage.add(actuatorsBar);
-  // bounding box
-  var actuatorsBox = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:brick, strokeWidth:3 });
-  actuatorsBar.add(actuatorsBox);
-  // relay
-  var relay = new Konva.Label({ x: 1010, y: 20 });
-  drawButton(relay, 'relay', brick);
-  actuatorsBar.add(relay);
-  // scaled output
-  var scaledOutput = new Konva.Label({ x: 1010, y: 60 });
-  drawButton(scaledOutput, 'scaled output', brick);
-  actuatorsBar.add(scaledOutput);
-
+  drawSidebar(actuatorsBar, brick);
+  drawDraggable(actuatorsBar, 1010, 20, brick, 'relay');
+  drawDraggable(actuatorsBar, 1010, 60, brick, 'scaled output');
   actuatorsBar.draw();
   actuatorsBar.hide();
 
 // Build Data Sidebar
   var dataBar = new Konva.Layer();
   stage.add(dataBar);
-  // bounding box
-  var dataBox = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:gold, strokeWidth:3 });
-  dataBar.add(dataBox);
-
+  drawSidebar(dataBar, gold);
   dataBar.draw();
   dataBar.hide();
 
 // Build Status Sidebar
   var statusBar = new Konva.Layer();
   stage.add(statusBar);
-  // bounding box
-  var statusBox = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:'gray', strokeWidth:3 });
-  statusBar.add(statusBox);
-
+  drawSidebar(statusBar, gold);
   statusBar.draw();
   statusBar.hide();
 

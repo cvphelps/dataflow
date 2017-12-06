@@ -17,7 +17,6 @@ var layer = new Konva.Layer();
 stage.add(layer);
 
 // Create Sensors Tab
-
 function drawTab(label, color, text) {
   label.add(new Konva.Tag({
     fill: color,
@@ -34,6 +33,12 @@ function drawTab(label, color, text) {
   label.on('click', function() {
     console.log(text + " tab clicked!");
   });
+  label.on('mouseover', function() {
+    document.body.style.cursor = 'pointer';
+  });
+  label.on('mouseout', function() {
+    document.body.style.cursor = 'default';
+  })
 }
 
 var tabSensors = new Konva.Label({ x: 10, y: -5 });
@@ -55,11 +60,3 @@ layer.add(tabData);
 layer.add(tabStatus);
 
 layer.draw();
-
-// cursor styling
-// box.on('mouseover', function() {
-//   document.body.style.cursor = 'pointer';
-// });
-// box.on('mouseout', function() {
-//   document.body.style.cursor = "default";
-// });

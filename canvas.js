@@ -47,13 +47,13 @@ function drawDraggable(layer, x, y, color, text) {
   layer.add(buttonDraggable);
 
   // on dragend, reset draggable button to original location, create new block at destination
-  node.on('dragend', function() {
-    if (node.x() < 1000 && node.x() > 0 && node.y() < 750 && node.y() > 0) {
-      console.log("drag and dropped!");
-    } else {
-      node.hide();
-    }
-  });
+  // node.on('dragend', function() {
+  //   if (node.x() < 1000 && node.x() > 0 && node.y() < 750 && node.y() > 0) {
+  //     console.log("drag and dropped!");
+  //   } else {
+  //     node.hide();
+  //   }
+  // });
 }
 
 // temperature sensor array

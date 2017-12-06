@@ -16,6 +16,13 @@ var stage = new Konva.Stage({
 var layer = new Konva.Layer();
 stage.add(layer);
 
+var contents = {};
+
+function drawSidebar(layer, color) {
+  var box = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:color, strokeWidth:3 });
+  layer.add(box);
+}
+
 function drawButton(node, text, color) {
   node.add(new Konva.Tag({
     fill: color,
@@ -31,29 +38,49 @@ function drawButton(node, text, color) {
   }));
 }
 
-function drawSidebar(layer, color) {
-  var box = new Konva.Rect({ x:1000, y:1, width:220, height:748, fill:'white', stroke:color, strokeWidth:3 });
-  layer.add(box);
+function drawBlock(node, text, color) {
+  node.add(new Konva.Tag({
+    fill: color,
+    cornerRadius: 20
+  }));
+  node.add(new Konva.Text({
+    text: text,
+    fontSize: 14,
+    fill: 'white',
+    align: 'center',
+    width: 120,
+    padding: 10
+  }))
 }
 
-function drawDraggable(layer, x, y, color, text) {
+function drawDraggable(thisLayer, x, y, color, text) {
   // Static Button
-  var buttonStatic = new Konva.Label({x:x,y:y});
-  drawButton(buttonStatic, text, color);
-  layer.add(buttonStatic);
+  var static = new Konva.Label({x:x,y:y});
+  drawButton(static, text, color);
+  thisLayer.add(static);
   // Draggable Button
-  var buttonDraggable = new Konva.Label({x:x,y:y, draggable:true });
-  drawButton(buttonDraggable, text, color);
-  layer.add(buttonDraggable);
+  var drag = new Konva.Label({x:x,y:y, draggable:true });
+  drawButton(drag, text, color);
+  thisLayer.add(drag);
 
   // on dragend, reset draggable button to original location, create new block at destination
-  // node.on('dragend', function() {
-  //   if (node.x() < 1000 && node.x() > 0 && node.y() < 750 && node.y() > 0) {
-  //     console.log("drag and dropped!");
-  //   } else {
-  //     node.hide();
-  //   }
-  // });
+  drag.on('dragend', function() {
+    if (drag.x() < 1000 && drag.x() > 0 && drag.y() < 750 && drag.y() > 0) {
+      console.log("drag and dropped!");
+    }
+    var newX = drag.x();
+    var newY = drag.y();
+    console.log("newX: " + newX);
+    console.log("newY: " + newY);
+    var newBlock = new Konva.Label({x:newX,y:newY, draggable:true});
+    drawBlock(newBlock, text, color);
+    layer.add(newBlock);
+    layer.draw();
+
+    drag.x(x);
+    drag.y(y);
+    thisLayer.draw();
+  });
 }
 
 // temperature sensor array
@@ -68,7 +95,7 @@ function drawDraggable(layer, x, y, color, text) {
   drawDraggable(sensorBar, 1010, 100, teal, 'light');
   drawDraggable(sensorBar, 1010, 140, teal, 'CO2');
   drawDraggable(sensorBar, 1010, 180, teal, 'soil moisture');
-  drawDraggable(sensorBar, 1010, 220, teal, 'wet temperature');
+  drawDraggable(sensorBar, 1010, 220, teal, 'wet temp');
   sensorBar.draw();
 
 // Build Logic Sidebar

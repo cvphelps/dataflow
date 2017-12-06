@@ -8,13 +8,21 @@ const white = '#ffffff';
 
 var stage = new Konva.Stage({
   container: 'container',
-  width: window.innerWidth,
-  height: window.innerHeight
+  width: 1400,
+  height: 800
 });
 
 // Add Layer
 var layer = new Konva.Layer();
 stage.add(layer);
+
+// Create Sidebars
+var sensorSidebar = new Konva.Layer();
+stage.add(sensorSidebar);
+
+var sidebarBox = new Konva.Rect({ x:1000, y:0, width:300, height:800, fill:'white', stroke:'gray', strokeWidth:1 });
+sensorSidebar.add(sidebarBox);
+sensorSidebar.draw();
 
 // Create Sensors Tab
 function drawTab(label, color, text) {
